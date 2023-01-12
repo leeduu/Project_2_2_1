@@ -1,8 +1,12 @@
 package hiber.service;
 
 import hiber.dao.UserDao;
+import hiber.model.Car;
 import hiber.model.User;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +14,9 @@ import java.util.List;
 
 @Service
 public class UserServiceImp implements UserService {
+
+   @Autowired
+   private SessionFactory sessionFactory;
 
    @Autowired
    private UserDao userDao;
@@ -26,4 +33,26 @@ public class UserServiceImp implements UserService {
       return userDao.listUsers();
    }
 
+   @Transactional
+   @Override
+   public String getUserByCar(String model, int series) {
+      return userDao.getUserByCar(model, series);
+   }
+
+   @Transactional
+   @Override
+   public SessionFactory getSession() {
+      if (sessionFactory == null) {
+         try {
+
+            ApplicationContext context =
+                    new AnnotationConfigApplicationContext("hiber.service");
+            User user = context.getBean("user", User.class);
+            Car car = context.getBean("car", Car.class);
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+      }
+      return sessionFactory;
+   }
 }

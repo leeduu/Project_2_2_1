@@ -3,13 +3,18 @@ package hiber;
 import hiber.config.AppConfig;
 import hiber.model.User;
 import hiber.service.UserService;
+import hiber.service.UserServiceImp;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class MainApp {
+public class MainApp {     // 4. Создайте несколько пользователей с машинами, добавьте их в базу данных, вытащите обратно.
    public static void main(String[] args) throws SQLException {
+
+      UserServiceImp userServiceImp = new UserServiceImp();
+      userServiceImp.getSession();
+
       AnnotationConfigApplicationContext context = 
             new AnnotationConfigApplicationContext(AppConfig.class);
 
@@ -28,7 +33,6 @@ public class MainApp {
          System.out.println("Email = "+user.getEmail());
          System.out.println();
       }
-
       context.close();
    }
 }

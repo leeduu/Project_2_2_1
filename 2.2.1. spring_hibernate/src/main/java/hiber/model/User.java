@@ -1,16 +1,29 @@
 package hiber.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
 
+   @OneToOne(optional = false, cascade=CascadeType.ALL)
+   @JoinColumn(name = "user_id")
+   private Car carDetails;
+   public Car getCarDetails() {
+      return carDetails;
+   }
+   public void setCarDetails(Car carDetails) {
+      this.carDetails = carDetails;
+   }
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "user_id")
    private Long id;
 
-   @Column(name = "name")
+   @Column(name = "first_name")
    private String firstName;
 
    @Column(name = "last_name")
@@ -57,5 +70,10 @@ public class User {
 
    public void setEmail(String email) {
       this.email = email;
+   }
+
+   @Override
+   public String toString() {
+      return String.format("User [id = %id, name = '%s', lastName = '%s', email = '%s']", id, firstName, lastName, email);
    }
 }
